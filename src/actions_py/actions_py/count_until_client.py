@@ -2,9 +2,8 @@
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionClient
-from rclpy.action.client import ClientGoalHandle
+from rclpy.action.client import ClientGoalHandle, GoalStatus
 from my_robot_interfaces.action import CountUntil
-
 
 class CountUntilClientNode(Node):
   def __init__(self):
@@ -20,7 +19,15 @@ class CountUntilClientNode(Node):
     goal.period = period
     # Send the goal
     self.get_logger().info("Sending goal")
-    self.count_until_client.send_goal_async(goal).add_done_callback(self.go_response_callback)
+    self.count_until_client.send_goal_async(goal, self.goal_feedback_callback).\
+        add_done_callback(self.go_response_callback)
+    # # Send a cancle goal 3 seconds later
+    # self.timer_ = self.create_timer(3.0, self.cancle_goal)
+
+  def cancle_goal(self):
+    self.get_logger().info("Send a cancle goal")
+    self.goal_handle_.cancel_goal_async()
+    self.timer_.cancel()
 
   def go_response_callback(self, future):
     self.goal_handle_ : ClientGoalHandle = future.result()
@@ -31,13 +38,24 @@ class CountUntilClientNode(Node):
       self.get_logger().warning("Goal got rejected")
 
   def goal_result_callback(self, future):
+    status = future.result().status
     result = future.result().result
+    if status == GoalStatus.STATUS_SUCCEEDED:
+      self.get_logger().info("Success!")
+    elif status == GoalStatus.STATUS_ABORTED:
+      self.get_logger().error("Aborted!")
+    elif status == GoalStatus.STATUS_CANCELED:
+      self.get_logger().warning("Canceled!")
     self.get_logger().info("Result: " + str(result.reached_number))
+
+  def goal_feedback_callback(self, feedback_msg):
+    number = feedback_msg.feedback.current_number
+    self.get_logger().info("Got feedback: " + str(number))
 
 def main(args = None):
   rclpy.init(args = args)
   node = CountUntilClientNode()
-  node.send_goal(-6, 1.0)
+  node.send_goal(6, 1.0)
   rclpy.spin(node)
   rclpy.shutdown()
 
