@@ -35,10 +35,11 @@ private:
       return rclcpp_action::GoalResponse::REJECT;
     } else {
       // 如果已有一个旧 goal 正在执行，则记录其 goal_id 用于后续中止旧 goal
+      mutex_.lock();
       if (goal_handle_ && goal_handle_->is_active()) {
         preepmted_goal_id_ = goal_handle_->get_goal_id();
-        RCLCPP_INFO(this->get_logger(), "Abort current request and accept new goal");
-      } 
+      }
+      mutex_.unlock();
       RCLCPP_INFO(this->get_logger(), "Accepting the goal");
       return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
     }
@@ -58,8 +59,9 @@ private:
   }
 
   void execute_goal(const std::shared_ptr<CountUntilGoalHandle> goal_handle) {  // 执行目标回调
-    { std::lock_guard<std::mutex> lock(mutex_);
-    this->goal_handle_ = goal_handle; }
+    mutex_.lock();
+    this->goal_handle_ = goal_handle;
+    mutex_.unlock();
     // 从目标获取请求参数
     int target_number = goal_handle->get_goal()->target_number;
     double period = goal_handle->get_goal()->period;
@@ -69,14 +71,16 @@ private:
     auto result = std::make_shared<CountUntil::Result>();
     rclcpp::Rate loop_rate(1.0 / period);
     for (int i = 0; i < target_number; i++) {
-      std::unique_lock<std::mutex>lock(mutex_);
-      // 如果当前 goal 已被新 goal 抢占，则中止旧 goal
-      if (preepmted_goal_id_ == goal_handle->get_goal_id()) {
-        result->reached_number = counter;
-        goal_handle->abort(result);
-        return;
+      {
+        std::lock_guard<std::mutex> lock(mutex_);
+        // 如果当前 goal 已被新 goal 抢占，则中止旧 goal
+        if (preepmted_goal_id_ == goal_handle->get_goal_id()) {
+          RCLCPP_INFO(this->get_logger(), "Abort current request and accept new goal");
+          result->reached_number = counter;
+          goal_handle->abort(result);
+          return;
+        }
       }
-      lock.unlock();
       // 检查是否收到取消请求
       if (goal_handle->is_canceling()) {
         result->reached_number = counter;

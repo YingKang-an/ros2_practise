@@ -17,9 +17,17 @@ ament_target_dependencies(count_until_server rclcpp my_robot_interfaces rclcpp_a
 add_executable(count_until_client src/count_until_client.cpp)
 ament_target_dependencies(count_until_client rclcpp my_robot_interfaces rclcpp_action)
 
+add_executable(move_robot_server src/move_robot_server.cpp)
+ament_target_dependencies(move_robot_server rclcpp my_robot_interfaces rclcpp_action)
+
+add_executable(move_robot_client src/move_robot_client.cpp)
+ament_target_dependencies(move_robot_client rclcpp my_robot_interfaces rclcpp_action)
+
 install(TARGETS
   count_until_server
   count_until_client
+  move_robot_server
+  move_robot_client
   DESTINATION lib/${PROJECT_NAME}
 )
 
