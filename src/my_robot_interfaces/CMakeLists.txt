@@ -11,6 +11,7 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(rosidl_cmake REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/HardwearStatus.msg"
   "action/CountUntil.action"
   "action/MoveRobot.action"
 )

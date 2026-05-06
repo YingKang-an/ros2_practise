@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="my_py_pkg" exec="py_node"/>
+  <node pkg="my_py_pkg" exec="robot_news_station"/>
+  <node pkg="my_cpp_pkg" exec="cpp_node"/>
+</launch>

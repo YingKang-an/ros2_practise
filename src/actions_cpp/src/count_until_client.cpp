@@ -49,7 +49,7 @@ private:
   // 目标接受与拒绝回调
   void goal_response_callback(const CountUntilGoalHandle::SharedPtr& goal_handle) {
     if (nullptr == goal_handle) {
-      RCLCPP_INFO(this->get_logger(), "Goal got rejected");
+      RCLCPP_WARN(this->get_logger(), "Goal got rejected");
     } else {
       this->goal_handle_ = goal_handle;
       RCLCPP_INFO(this->get_logger(), "Goal got accepted");
@@ -72,7 +72,7 @@ private:
 
   // 反馈回调: 接收服务器中间结果
   void goal_feedback_callback(const CountUntilGoalHandle::SharedPtr & goal_handle,
-      const std::shared_ptr<const CountUntil::Feedback> feedback) {
+        const std::shared_ptr<const CountUntil::Feedback>& feedback) {
     (void) goal_handle;
     int number = feedback->current_number;
     RCLCPP_INFO(this->get_logger(), "Got feedback : %d", number);

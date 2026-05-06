@@ -7,7 +7,7 @@ using GoalHandle = rclcpp_action::ServerGoalHandle<MoveRobot>;
 
 class ServerNode : public rclcpp::Node {
 public:
-  ServerNode() : Node("move_robot_node"), robot_position_(90) {
+  ServerNode() : Node("move_robot_node"), robot_position_(0) {
     callback_group_ = this->create_callback_group(
         rclcpp::CallbackGroupType::Reentrant);
     serve_ = rclcpp_action::create_server<MoveRobot>(
