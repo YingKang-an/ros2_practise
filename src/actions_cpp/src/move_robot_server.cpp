@@ -27,6 +27,7 @@ private:
   rclcpp_action::GoalResponse goal_callback(
       const rclcpp_action::GoalUUID uuid,
       std::shared_ptr<const MoveRobot::Goal> goal) {
+    (void) uuid;
     RCLCPP_INFO(this->get_logger(), "Received a goal");
     if (0 >= goal->position || 0 >= goal->velocity) {
       RCLCPP_ERROR(this->get_logger(), "Regecting the goal");

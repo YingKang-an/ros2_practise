@@ -12,6 +12,7 @@ find_package(rosidl_cmake REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/HardwearStatus.msg"
+  "srv/ComputeRectangleArea.srv"
   "action/CountUntil.action"
   "action/MoveRobot.action"
 )

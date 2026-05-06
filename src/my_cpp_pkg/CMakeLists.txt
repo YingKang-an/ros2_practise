@@ -10,6 +10,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(example_interfaces REQUIRED)
+find_package(my_robot_interfaces REQUIRED)
 
 # 添加头文件搜索路径，编译器会在 include 目录里查找头文件
 include_directories(include)
@@ -48,10 +49,49 @@ ament_target_dependencies(template_cpp_node
   std_msgs
 )
 
+add_executable(hardware_status_publisher
+  src/hardware_status_publisher.cpp
+)
+ament_target_dependencies(hardware_status_publisher
+  rclcpp
+  my_robot_interfaces
+)
+
+add_executable(hardware_status_subscriber
+  src/hardware_status_subscriber.cpp
+)
+
+ament_target_dependencies(hardware_status_subscriber
+  rclcpp
+  my_robot_interfaces
+)
+
+add_executable(compute_rectangle_area_server
+  src/compute_rectangle_area_server.cpp
+)
+
+ament_target_dependencies(compute_rectangle_area_server
+  rclcpp
+  my_robot_interfaces
+)
+
+add_executable(compute_rectangle_area_client
+  src/compute_rectangle_area_client.cpp
+)
+
+ament_target_dependencies(compute_rectangle_area_client
+  rclcpp
+  my_robot_interfaces
+)
+
 install(TARGETS
   cpp_node
   robot_news_station
   smartphone
+  hardware_status_publisher
+  hardware_status_subscriber
+  compute_rectangle_area_server
+  compute_rectangle_area_client
   template_cpp_node
   DESTINATION lib/${PROJECT_NAME}
 )
