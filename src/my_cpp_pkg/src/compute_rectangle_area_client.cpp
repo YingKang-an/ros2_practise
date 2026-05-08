@@ -6,8 +6,7 @@
 using namespace std::chrono_literals;
 using ComputeRectangleArea = my_robot_interfaces::srv::ComputeRectangleArea;
 
-class ComputeRectangleAreaClient : public rclcpp::Node
-{
+class ComputeRectangleAreaClient : public rclcpp::Node {
 public:
   ComputeRectangleAreaClient() : Node("compute_rectangle_area_client") {
     client_ = this->create_client<ComputeRectangleArea>(

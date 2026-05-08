@@ -4,8 +4,7 @@
 
 using ComputeRectangleArea = my_robot_interfaces::srv::ComputeRectangleArea;
 
-class ComputeRectangleAreaService : public rclcpp::Node
-{
+class ComputeRectangleAreaService : public rclcpp::Node {
 public:
   ComputeRectangleAreaService() : Node("compute_rectangle_area_service") {
     service_ = this->create_service<ComputeRectangleArea>(

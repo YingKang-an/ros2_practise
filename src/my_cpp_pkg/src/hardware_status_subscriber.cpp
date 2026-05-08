@@ -19,6 +19,7 @@ private:
         msg->are_motor_ready ? "true" : "false",
         msg->debug_message.c_str());
   }
+
 private:
   rclcpp::Subscription<my_robot_interfaces::msg::HardwearStatus>::SharedPtr subscription_;
 };

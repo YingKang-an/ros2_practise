@@ -1,0 +1,25 @@
+<launch>
+<!-- node 节点  exec 可执行文件  name 重命名节点 -->
+  <node pkg="my_cpp_pkg" exec="robot_news_station" name="send">
+    <!-- remap 重映射 话题 -->
+    <remap from="/robot_news" to="/news"/>
+    <!-- param 参数 -->
+    <!-- <param name="name" value="YinKang'an"/-->
+    <!--param name="period" value="1.5"/-->
+    <!--param from="$(find-pkg-share my_robot_bringup)/config/params.yaml"/-->
+    <param from="/home/yinkangan/Desktop/ros_practise/src/my_robot_bringup/config/params.yaml"/>
+  </node>
+  <node pkg="my_cpp_pkg" exec="robot_news_station">
+    <!-- remap 重映射 话题 -->
+    <remap from="/robot_news" to="/news"/>
+    <param from="/home/yinkangan/Desktop/ros_practise/src/my_robot_bringup/config/params.yaml"/>
+  </node>
+  <node pkg="my_cpp_pkg" exec="smartphone" name="receive">
+    <remap from="/robot_news" to="/news"/>
+  </node>
+  <node pkg = "actions_cpp" exec = "count_until_client"/>
+  <node pkg = "actions_cpp" exec = "count_until_server"/>
+  <!-- namespace 命名空间 -->
+  <node pkg = "actions_cpp" exec = "count_until_client" namespace = "ns"/>
+  <node pkg = "actions_cpp" exec = "count_until_server" namespace = "ns"/>
+</launch>

@@ -1,17 +1,15 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>my_robot_bringup</name>
+  <name>components_cpp</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
   <maintainer email="kanganyin911@gmail.com">yinkangan</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
-  <!--要启动的包-->
-  <exec_depend>my_py_pkg</exec_depend>
-  <exec_depend>my_cpp_pkg</exec_depend>
-  <exec_depend>actions_cpp</exec_depend>
+
+  <depend>rclcpp</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
