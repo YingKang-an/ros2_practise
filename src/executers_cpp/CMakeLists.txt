@@ -11,12 +11,18 @@ find_package(rclcpp REQUIRED)
 include_directories(include)
 
 add_executable(single_threaded_executor
-  src/single_threaded_executor
+  src/single_threaded_executor.cpp
 )
 
 ament_target_dependencies(single_threaded_executor rclcpp)
 
-install(TARGETS single_threaded_executor
+add_executable(multi_threaded_executor
+  src/multi_threaded_executor.cpp
+)
+
+ament_target_dependencies(multi_threaded_executor rclcpp)
+
+install(TARGETS single_threaded_executor multi_threaded_executor
   DESTINATION lib/${PROJECT_NAME}
 )
 
