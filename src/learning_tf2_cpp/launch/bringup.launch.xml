@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <node pkg="turtlesim" exec="turtlesim_node" />
+  <node pkg="learning_tf2_cpp" exec="turtle_tf2_broadcaster">
+    <param name="turtlename" value="turtle1" />
+  </node>
+  <arg name="target_frame" default="turtle1" description="Target frame name." />
+  <node pkg="learning_tf2_cpp" exec="turtle_tf2_broadcaster">
+    <param name="turtlename" value="turtle2" />
+  </node>
+  <node pkg="learning_tf2_cpp" exec="turtle_tf2_listener">
+    <param name="target_frame" value="$(var target_frame)" />
+  </node>
+</launch>
