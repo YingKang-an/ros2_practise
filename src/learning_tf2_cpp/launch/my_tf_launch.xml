@@ -1,0 +1,10 @@
+<launch>
+  <!-- 启动静态广播器 -->
+  <node pkg="learning_tf2_cpp" exec="my_static_tf2_broadcaster" name="my_static_tf2_broadcaster" output="screen"/>
+
+  <!-- 启动动态广播器 -->
+  <node pkg="learning_tf2_cpp" exec="my_dynamic_tf2_broadcaster" name="my_dynamic_tf2_broadcaster" output="screen"/>
+
+  <!-- 启动监听器 -->
+  <node pkg="learning_tf2_cpp" exec="my_tf2_listener" name="my_tf2_listener" output="screen"/>
+</launch>

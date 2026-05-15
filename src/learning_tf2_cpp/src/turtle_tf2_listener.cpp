@@ -53,9 +53,24 @@ private:
         // and send velocity commands for turtle2 to reach target_frame
         try {
           // 在目标坐标系 toFrameRel 下，fromFrameRel 的位置和朝向是多少
-          t = tf_buffer_->lookupTransform(
-            toFrameRel, fromFrameRel,
-            tf2::TimePointZero);
+          t = tf_buffer_->lookupTransform(toFrameRel, fromFrameRel,
+              tf2::TimePointZero);
+          RCLCPP_INFO_STREAM(this->get_logger(), 
+              "frame_id: " << t.header.frame_id);
+          RCLCPP_INFO_STREAM(this->get_logger(),
+              "stamp: " << t.header.stamp.sec << "." 
+              << std::setw(9) << std::setfill('0') << t.header.stamp.nanosec);
+          RCLCPP_INFO_STREAM(this->get_logger(),
+              "child_frame_id: " << t.child_frame_id);
+          RCLCPP_INFO_STREAM(this->get_logger(),
+              "translation: (" << t.transform.translation.x << ", "
+              << t.transform.translation.y << ", "
+              << t.transform.translation.z << ")");
+          RCLCPP_INFO_STREAM(this->get_logger(),
+              "rotation: (" << t.transform.rotation.x << ", "
+              << t.transform.rotation.y << ", "
+              << t.transform.rotation.z << ", "
+              << t.transform.rotation.w << ")");
         } catch (const tf2::TransformException & ex) {
           RCLCPP_INFO(this->get_logger(), "Could not transform %s to %s: %s",
               toFrameRel.c_str(), fromFrameRel.c_str(), ex.what());
@@ -121,8 +136,7 @@ private:
   std::string target_frame_;
 };
 
-int main(int argc, char * argv[])
-{
+int main(int argc, char* argv[]) {
   rclcpp::init(argc, argv);
   rclcpp::spin(std::make_shared<FrameListener>());
   rclcpp::shutdown();
