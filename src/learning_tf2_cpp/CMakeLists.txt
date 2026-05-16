@@ -11,6 +11,8 @@ find_package(geometry_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(message_filters REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 find_package(turtlesim REQUIRED)
 
 # Executables
@@ -20,6 +22,10 @@ add_executable(my_dynamic_tf2_broadcaster src/my_dynamic_tf2_broadcaster.cpp)
 add_executable(turtle_tf2_broadcaster src/turtle_tf2_broadcaster.cpp)
 add_executable(turtle_tf2_listener src/turtle_tf2_listener.cpp)
 add_executable(my_tf2_listener src/my_tf2_listener.cpp)
+add_executable(fixed_frame_tf2_broadcaster src/fixed_frame_tf2_broadcaster.cpp)
+add_executable(dynamic_frame_tf2_broadcaster src/dynamic_frame_tf2_broadcaster.cpp)
+add_executable(turtle_tf2_fack_message_broadcaster src/turtle_tf2_fack_message_broadcaster.cpp)
+add_executable(turtle_tf2_message_filter src/turtle_tf2_message_filter.cpp)
 
 # Dependencies
 ament_target_dependencies(static_turtle_tf2_broadcaster
@@ -60,6 +66,31 @@ ament_target_dependencies(my_tf2_listener
   tf2
   tf2_ros
 )
+ament_target_dependencies(turtle_tf2_fack_message_broadcaster
+  geometry_msgs
+  rclcpp
+  turtlesim
+)
+ament_target_dependencies(turtle_tf2_message_filter
+  geometry_msgs
+  message_filters
+  rclcpp
+  tf2
+  tf2_geometry_msgs
+  tf2_ros
+)
+ament_target_dependencies(
+  fixed_frame_tf2_broadcaster
+  geometry_msgs
+  rclcpp
+  tf2_ros
+)
+ament_target_dependencies(
+  dynamic_frame_tf2_broadcaster
+  geometry_msgs
+  rclcpp
+  tf2_ros
+)
 
 # Install all executables
 install(TARGETS
@@ -69,7 +100,9 @@ install(TARGETS
   turtle_tf2_broadcaster
   turtle_tf2_listener
   my_tf2_listener
-  DESTINATION lib/${PROJECT_NAME}
+  fixed_frame_tf2_broadcaster
+  dynamic_frame_tf2_broadcaster
+  turtle_tf2_fack_message_broadcaster  turtle_tf2_message_filter  DESTINATION lib/${PROJECT_NAME}
 )
 
 # Install launch files

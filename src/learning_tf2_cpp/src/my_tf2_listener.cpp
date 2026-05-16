@@ -18,13 +18,16 @@ public:
   }
 
 private:
-  void on_timer()
-  {
+  void on_timer() {
     const std::string target = "world";
     const std::string source = "moving_frame";
     try {
       geometry_msgs::msg::TransformStamped t =
-        tf_buffer_->lookupTransform(target, source, tf2::TimePointZero);
+        tf_buffer_->lookupTransform(
+          target,
+          source,
+          this->get_clock()->now(),
+          rclcpp::Duration(500ms));
 
       RCLCPP_INFO_STREAM(this->get_logger(), "frame_id: " << t.header.frame_id);
       RCLCPP_INFO_STREAM(this->get_logger(), "stamp: " << t.header.stamp.sec << "." 
