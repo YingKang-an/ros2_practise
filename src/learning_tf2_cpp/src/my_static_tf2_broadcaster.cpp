@@ -13,9 +13,8 @@ public:
 
     geometry_msgs::msg::TransformStamped t;
     t.header.stamp = this->get_clock()->now();
-    // 在 moving_frame 坐标系下的坐标，转换到 world 坐标系下
-    t.header.frame_id = "world";
-    t.child_frame_id = "static_frame";
+    t.header.frame_id = "world"; // 父坐标系
+    t.child_frame_id = "static_frame"; // 子坐标系
     t.transform.translation.x = 1;
     t.transform.translation.y = 1;
     t.transform.translation.z = 1;

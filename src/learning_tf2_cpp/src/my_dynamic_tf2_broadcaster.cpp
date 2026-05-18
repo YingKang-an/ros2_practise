@@ -15,9 +15,8 @@ private:
   void callback() {
     geometry_msgs::msg::TransformStamped t;
     t.header.stamp = this->get_clock()->now();
-    // 在 moving_frame 坐标系下的坐标，转换到 world 坐标系下
-    t.header.frame_id = "world";
-    t.child_frame_id = "moving_frame";
+    t.header.frame_id = "world"; // 父坐标系
+    t.child_frame_id = "moving_frame"; // 子坐标系
 
     // move in a circle on the XY plane
     t.transform.translation.x = std::cos(angle_);

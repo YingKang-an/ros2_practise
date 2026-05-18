@@ -54,7 +54,7 @@ private:
         try {
           // 在目标坐标系 toFrameRel 下，fromFrameRel 的位置和朝向是多少
           t = tf_buffer_->lookupTransform(toFrameRel, fromFrameRel,
-              tf2::TimePointZero);
+              this->get_clock()->now(), rclcpp::Duration(500ms));
           RCLCPP_INFO_STREAM(this->get_logger(), 
               "frame_id: " << t.header.frame_id);
           RCLCPP_INFO_STREAM(this->get_logger(),

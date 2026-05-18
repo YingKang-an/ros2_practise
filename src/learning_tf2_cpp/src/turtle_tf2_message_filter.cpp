@@ -1,3 +1,6 @@
+// 传感器消息 和 TF 变换 是两条完全独立的数据流
+// 拿到某一时刻 t 的传感器数据 → 必须拿到同一时刻 t 的 TF 变换
+
 #include <chrono>
 #include <memory>
 #include <string>
@@ -13,9 +16,9 @@
 
 using namespace std::chrono_literals;
 
-class PoseDrawer : public rclcpp::Node {
+class TF2MessageFilter : public rclcpp::Node {
 public:
-  PoseDrawer() : Node("turtle_tf2_pose_drawer") {
+  TF2MessageFilter() : Node("tf2_message_filter") {
     // Declare and acquire `target_frame` parameter
     target_frame_ = this->declare_parameter<std::string>("target_frame", "turtle1");
 
@@ -36,7 +39,7 @@ public:
       point_sub_, *tf2_buffer_, target_frame_, 100, this->get_node_logging_interface(),
       this->get_node_clock_interface(), buffer_timeout);
     // Register a callback with tf2_ros::MessageFilter to be called when transforms are available
-    tf2_filter_->registerCallback(&PoseDrawer::msgCallback, this);
+    tf2_filter_->registerCallback(&TF2MessageFilter::msgCallback, this);
   }
 
 private:
@@ -62,7 +65,7 @@ private:
 
 int main(int argc, char * argv[]) {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<PoseDrawer>());
+  rclcpp::spin(std::make_shared<TF2MessageFilter>());
   rclcpp::shutdown();
   return 0;
 }

@@ -22,12 +22,11 @@ private:
     const std::string target = "world";
     const std::string source = "moving_frame";
     try {
+      // 查找变换关系 t
       geometry_msgs::msg::TransformStamped t =
-        tf_buffer_->lookupTransform(
-          target,
-          source,
+        tf_buffer_->lookupTransform(target, source,
           this->get_clock()->now(),
-          rclcpp::Duration(500ms));
+          rclcpp::Duration(500ms)); // 在这里进行目标坐标的转换
 
       RCLCPP_INFO_STREAM(this->get_logger(), "frame_id: " << t.header.frame_id);
       RCLCPP_INFO_STREAM(this->get_logger(), "stamp: " << t.header.stamp.sec << "." 
