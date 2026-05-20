@@ -32,8 +32,19 @@ target_include_directories(my_first_bt PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
+add_executable(my_blackboard src/my_blackboard.cpp src/blackboard_nodes.cpp)
+ament_target_dependencies(
+  my_blackboard
+  rclcpp
+  behaviortree_cpp
+  ament_index_cpp
+)
+target_include_directories(my_blackboard PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+
 install(
-  TARGETS factory my_first_bt
+  TARGETS factory my_first_bt my_blackboard
   DESTINATION lib/${PROJECT_NAME}
 )
 install(

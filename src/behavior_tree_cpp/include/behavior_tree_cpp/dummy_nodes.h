@@ -1,5 +1,5 @@
-#ifndef BEHAVIOR_TREE_CPP_DUMMY_NODES_H
-#define BEHAVIOR_TREE_CPP_DUMMY_NODES_H
+#ifndef BEHAVIOR_TREE_CPP__DUMMY_NODES_H
+#define BEHAVIOR_TREE_CPP__DUMMY_NODES_H
 
 #include <behaviortree_cpp/behavior_tree.h>
 #include <behaviortree_cpp/bt_factory.h>
@@ -47,4 +47,4 @@ void registerDummyNodes(BT::BehaviorTreeFactory& factory);
 
 }  // namespace DummyNodes
 
-#endif  // BEHAVIOR_TREE_CPP_DUMMY_NODES_H
+#endif  // BEHAVIOR_TREE_CPP__DUMMY_NODES_H
