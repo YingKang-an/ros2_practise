@@ -43,8 +43,19 @@ target_include_directories(my_blackboard PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
+add_executable(my_ide_tree src/my_ide_tree.cpp)
+ament_target_dependencies(
+  my_ide_tree
+  rclcpp
+  behaviortree_cpp
+  ament_index_cpp
+)
+target_include_directories(my_ide_tree PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+
 install(
-  TARGETS factory my_first_bt my_blackboard
+  TARGETS factory my_first_bt my_blackboard my_ide_tree
   DESTINATION lib/${PROJECT_NAME}
 )
 install(
