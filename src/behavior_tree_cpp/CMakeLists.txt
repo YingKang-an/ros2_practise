@@ -8,40 +8,24 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+
+# Add default BehaviorTree.CPP install prefix so CMake can find the config file.
+list(APPEND CMAKE_PREFIX_PATH "/opt/BehaviorTree.CPP")
+set(behaviortree_cpp_DIR "/opt/BehaviorTree.CPP/share/behaviortree_cpp/cmake" CACHE PATH "Path to behaviortree_cppConfig.cmake")
 find_package(behaviortree_cpp REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 
-add_executable(factory src/factory.cpp)
+add_executable(blackboard src/blackboard.cpp)
 ament_target_dependencies(
-  factory
-  rclcpp
-  behaviortree_cpp
-)
-target_include_directories(factory PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-)
-#------------------------#
-add_executable(my_first_bt src/my_first_bt.cpp src/dummy_nodes.cpp)
-ament_target_dependencies(
-  my_first_bt
+  blackboard
   rclcpp
   behaviortree_cpp
   ament_index_cpp
 )
-target_include_directories(my_first_bt PUBLIC
+target_include_directories(blackboard PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
-
-add_executable(my_blackboard src/my_blackboard.cpp src/blackboard_nodes.cpp)
-ament_target_dependencies(
-  my_blackboard
-  rclcpp
-  behaviortree_cpp
-  ament_index_cpp
-)
-target_include_directories(my_blackboard PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-)
+set_target_properties(blackboard PROPERTIES INSTALL_RPATH "/opt/BehaviorTree.CPP/lib")
 
 add_executable(my_ide_tree src/my_ide_tree.cpp)
 ament_target_dependencies(
@@ -53,9 +37,22 @@ ament_target_dependencies(
 target_include_directories(my_ide_tree PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
+set_target_properties(my_ide_tree PROPERTIES INSTALL_RPATH "/opt/BehaviorTree.CPP/lib")
+
+add_executable(template_blackboard src/template_blackboard.cpp)
+ament_target_dependencies(
+  template_blackboard
+  rclcpp
+  behaviortree_cpp
+  ament_index_cpp
+)
+target_include_directories(template_blackboard PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+set_target_properties(template_blackboard PROPERTIES INSTALL_RPATH "/opt/BehaviorTree.CPP/lib")
 
 install(
-  TARGETS factory my_first_bt my_blackboard my_ide_tree
+  TARGETS blackboard my_ide_tree template_blackboard
   DESTINATION lib/${PROJECT_NAME}
 )
 install(

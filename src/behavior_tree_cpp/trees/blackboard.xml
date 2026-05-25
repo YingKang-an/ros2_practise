@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4">
+  <BehaviorTree ID="maintree">
+    <Sequence>
+      <SaySomething message="hello"/>
+      <!--出于调试目的，可以使用名为Script的内置操作将静态值写入条目-->
+      <!--Script code=" the_answer:='The answer is 42' " /-->
+      <ThinkWhatToSay text="{the_answer}"/>
+      <SaySomething message="{the_answer}"/>
+    </Sequence>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="SaySomething"
+            editable="true">
+      <input_port name="message"
+                  default="hello"
+                  type="String"/>
+    </Action>
+    <Action ID="ThinkWhatToSay"
+            editable="true">
+      <output_port name="text"
+                   type="String"/>
+    </Action>
+  </TreeNodesModel>
+
+</root>

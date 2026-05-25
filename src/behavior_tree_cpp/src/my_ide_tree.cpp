@@ -29,21 +29,20 @@ public:
   }
 };
 
-class GripperInterface
-{
+class GripperInterface {
 public:
-  GripperInterface(): _open(true) {}
-    
-  BT::NodeStatus open() 
+  GripperInterface() : _open(true)
   {
-	_open = true;
-  std::this_thread::sleep_for(2s);
-	std::cout << "GripperInterface::open" << std::endl;
-	return BT::NodeStatus::SUCCESS;
+  }
+    
+  BT::NodeStatus open() {
+    _open = true;
+    std::this_thread::sleep_for(2s);
+    std::cout << "GripperInterface::open" << std::endl;
+    return BT::NodeStatus::SUCCESS;
   }
 
-  BT::NodeStatus close() 
-  {
+  BT::NodeStatus close() {
     std::cout << "GripperInterface::close" << std::endl;
     _open = false;
     std::this_thread::sleep_for(2s);
