@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4">
+  <BehaviorTree ID="MainTree">
+    <Sequence>
+      <CalculateGoal goal="{key}"/>
+      <PrintTarget target="{key}"/>
+    </Sequence>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="CalculateGoal">
+      <output_port name="goal"
+                   type="Position2D"/>
+    </Action>
+    <Action ID="PrintTarget">
+      <input_port name="target"
+                  type="Position2D">Simply print the goal on console...</input_port>
+    </Action>
+  </TreeNodesModel>
+
+</root>

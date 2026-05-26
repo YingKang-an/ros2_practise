@@ -5,6 +5,10 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -51,8 +55,20 @@ target_include_directories(template_blackboard PUBLIC
 )
 set_target_properties(template_blackboard PROPERTIES INSTALL_RPATH "/opt/BehaviorTree.CPP/lib")
 
+add_executable(test_bt src/test.cpp)
+ament_target_dependencies(
+  test_bt
+  rclcpp
+  behaviortree_cpp
+  ament_index_cpp
+)
+target_include_directories(test_bt PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+set_target_properties(test_bt PROPERTIES INSTALL_RPATH "/opt/BehaviorTree.CPP/lib")
+
 install(
-  TARGETS blackboard my_ide_tree template_blackboard
+  TARGETS blackboard my_ide_tree template_blackboard test_bt
   DESTINATION lib/${PROJECT_NAME}
 )
 install(
