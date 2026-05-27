@@ -14,10 +14,11 @@ struct Position2D
 namespace BT
 {
 
-template <> // 显式特化
-inline Position2D convertFromString(StringView str)
-{
+template <> inline Position2D convertFromString(StringView str) {
   auto parts = splitString(str, ';');
+  if (parts.size() != 2) {
+    throw RuntimeError("invalid input!");
+  }
   Position2D out;
   out.x = convertFromString<double>(parts[0]);
   out.y = convertFromString<double>(parts[1]);
@@ -26,22 +27,20 @@ inline Position2D convertFromString(StringView str)
 
 } // namespace BT
 
-// ------------------------------
-// 写入节点
-// ------------------------------
 class TemplateBlackboard : public BT::SyncActionNode
 {
 public:
-    TemplateBlackboard(const std::string& name, const BT::NodeConfig& cfg)
-        : SyncActionNode(name, cfg) {}
+  TemplateBlackboard(const std::string& name, const BT::NodeConfig& cfg)
+  : SyncActionNode(name, cfg)
+  {
+  }
 
-    static BT::PortsList providedPorts()
-    {
-        return {
-            BT::OutputPort<Position2D>("point2f"),
-            BT::OutputPort<int>("hp")
-        };
-    }
+  static BT::PortsList providedPorts() {
+    return {
+      BT::OutputPort<Position2D>("point2f"),
+      BT::OutputPort<int>("hp")
+    };
+  }
 
     BT::NodeStatus tick() override
     {
@@ -54,9 +53,6 @@ public:
     }
 };
 
-// ------------------------------
-// 读取节点（适配你的XML！）
-// ------------------------------
 class ReadBlackboard : public BT::SyncActionNode
 {
 public:
@@ -91,15 +87,13 @@ public:
     }
 };
 
-// ------------------------------
-// main
-// ------------------------------
 int main() {
   BT::BehaviorTreeFactory factory;
   factory.registerNodeType<TemplateBlackboard>("TemplateBlackboard");
   factory.registerNodeType<ReadBlackboard>("ReadBlackboard");
 
-  auto path = ament_index_cpp::get_package_share_directory("behavior_tree_cpp") + "/trees/template_blackboard.xml";
+  auto path = ament_index_cpp::get_package_share_directory(
+      "behavior_tree_cpp") + "/trees/template_blackboard.xml";
   auto tree = factory.createTreeFromFile(path);
   tree.tickWhileRunning();
 

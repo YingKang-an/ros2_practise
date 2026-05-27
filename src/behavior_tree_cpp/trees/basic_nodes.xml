@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4"
+      main_tree_to_execute="main">
+  <BehaviorTree ID="main">
+    <Sequence>
+      <Fallback>
+        <IsDoorOpen/>
+        <OpenDoor/>
+        <Sequence>
+          <HaveKey/>
+          <UnLockDoor/>
+          <OpenDoor/>
+        </Sequence>
+        <SmashDoor/>
+      </Fallback>
+      <EntrerRoom/>
+    </Sequence>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="EntrerRoom"
+            editable="true"/>
+    <Condition ID="HaveKey"
+               editable="true"/>
+    <Condition ID="IsDoorOpen"
+               editable="true"/>
+    <Action ID="OpenDoor"
+            editable="true"/>
+    <Action ID="SmashDoor"
+            editable="true"/>
+    <Action ID="UnLockDoor"
+            editable="true"/>
+  </TreeNodesModel>
+
+</root>

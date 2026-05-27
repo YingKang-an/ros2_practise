@@ -55,20 +55,32 @@ target_include_directories(template_blackboard PUBLIC
 )
 set_target_properties(template_blackboard PROPERTIES INSTALL_RPATH "/opt/BehaviorTree.CPP/lib")
 
-add_executable(test_bt src/test.cpp)
+add_executable(groot_tutorial src/groot_tutorial.cpp)
 ament_target_dependencies(
-  test_bt
+  groot_tutorial
   rclcpp
   behaviortree_cpp
   ament_index_cpp
 )
-target_include_directories(test_bt PUBLIC
+target_include_directories(groot_tutorial PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
-set_target_properties(test_bt PROPERTIES INSTALL_RPATH "/opt/BehaviorTree.CPP/lib")
+set_target_properties(groot_tutorial PROPERTIES INSTALL_RPATH "/opt/BehaviorTree.CPP/lib")
+
+add_executable(basic_nodes src/basic_nodes.cpp)
+ament_target_dependencies(
+  basic_nodes
+  rclcpp
+  behaviortree_cpp
+  ament_index_cpp
+)
+target_include_directories(basic_nodes PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+set_target_properties(basic_nodes PROPERTIES INSTALL_RPATH "/opt/BehaviorTree.CPP/lib")
 
 install(
-  TARGETS blackboard my_ide_tree template_blackboard test_bt
+  TARGETS blackboard my_ide_tree template_blackboard groot_tutorial basic_nodes
   DESTINATION lib/${PROJECT_NAME}
 )
 install(

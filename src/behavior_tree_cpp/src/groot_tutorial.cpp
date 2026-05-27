@@ -1,4 +1,3 @@
-// test.cpp
 #include "ament_index_cpp/get_package_share_directory.hpp"
 #include "behaviortree_cpp/bt_factory.h"
 #include "behaviortree_cpp/action_node.h"
@@ -11,7 +10,7 @@
 #include <thread>
 #include <chrono>
 
-#define BT_GENERATE_MODEL_ONLY 0
+#define GENERATE_MODEL 0
 
 // 自定义坐标类型
 struct Position2D
@@ -22,12 +21,10 @@ struct Position2D
 
 namespace BT
 {
-template <>
-inline Position2D convertFromString(StringView str)
-{
+
+template <> inline Position2D convertFromString(StringView str) {
   auto parts = splitString(str, ';');
-  if (parts.size() != 2)
-  {
+  if (parts.size() != 2) {
     throw RuntimeError("Position2D must be in format 'x;y'");
   }
 
@@ -46,12 +43,13 @@ BT_JSON_CONVERTER(Position2D, pos)
   add_field("y", &pos.y);
 }
 
-// 自定义动作节点
-class CalculateGoal : public BT::SyncActionNode
-{
+// 自定义写入端口动作节点
+class CalculateGoal : public BT::SyncActionNode {
 public:
   CalculateGoal(const std::string& name, const BT::NodeConfig& cfg)
-  : BT::SyncActionNode(name, cfg) {}
+  : BT::SyncActionNode(name, cfg)
+  {
+  }
 
   static BT::PortsList providedPorts() {
     return { BT::OutputPort<Position2D>("goal") };
@@ -65,19 +63,20 @@ public:
   }
 };
 
-class PrintTarget : public BT::SyncActionNode
-{
+// 自定义读取端口动作节点
+class PrintTarget : public BT::SyncActionNode {
 public:
   PrintTarget(const std::string& name, const BT::NodeConfig& cfg)
-  : BT::SyncActionNode(name, cfg) {}
+  : BT::SyncActionNode(name, cfg) 
+  {
+  }
 
   static BT::PortsList providedPorts() {
-    const char* description = "Simply print the goal on console...";
+    const char description[] = "Simply print the goal on console...";
     return { BT::InputPort<Position2D>("target", description) };
   }
 
-  BT::NodeStatus tick() override
-  {
+  BT::NodeStatus tick() override {
     std::this_thread::sleep_for(std::chrono::seconds(2));
     auto res = getInput<Position2D>("target");
     if (!res) {
@@ -99,7 +98,6 @@ int main() {
   // 注册自定义类型
   BT::RegisterJsonDefinition<Position2D>();
 
-  // 只使用源码目录下的 trees 文件夹，不再写入 install 目录
   std::filesystem::path tree_dir = std::filesystem::current_path();
   while (true) {
     std::filesystem::path candidate = tree_dir / "src" / "behavior_tree_cpp" / "trees";
@@ -116,10 +114,10 @@ int main() {
   }
   std::filesystem::create_directories(tree_dir);
 
-  std::filesystem::path model_path = tree_dir / "nodes_model.xml";
-  std::filesystem::path tree_path = tree_dir / "nodes_model.xml";
+  std::filesystem::path model_path = tree_dir / "groot_tutorial.xml";
+  std::filesystem::path tree_path = tree_dir / "groot_tutorial.xml";
 
-#if BT_GENERATE_MODEL_ONLY
+#if GENERATE_MODEL
   std::string model_xml = BT::writeTreeNodesModelXML(factory);
   std::ofstream fout(model_path);
   fout << model_xml;
@@ -132,7 +130,6 @@ int main() {
 
   if (!std::filesystem::exists(tree_path)) {
     std::cerr << "Error: tree file not found at " << tree_path << "\n";
-    std::cerr << "Please create the behavior tree XML in this directory before running with BT_GENERATE_MODEL_ONLY=0." << std::endl;
     return 1;
   }
 
@@ -142,16 +139,14 @@ int main() {
   // 连接Groot2实时调试
   BT::Groot2Publisher publisher(tree, 5555);
 
-  while (true) {
-    tree.tickWhileRunning();
 
-    // 将黑板内容导出成 JSON 供观察
-    // 如果没有 RegisterJsonDefinition<Position2D>()，Position2D 的字段可能无法正确序列化显示
-    auto blackboard_json = BT::ExportBlackboardToJSON(*tree.rootBlackboard());
-    std::cout << "Blackboard JSON:\n" << blackboard_json.dump(2) << std::endl;
+  tree.tickWhileRunning();
 
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-  }
+    // // 将黑板内容导出成 JSON 供观察
+    // // 如果没有 RegisterJsonDefinition<Position2D>()，Position2D 的字段无法正确序列化显示
+    // auto blackboard_json = BT::ExportBlackboardToJSON(*tree.rootBlackboard());
+    // std::cout << "Blackboard JSON:\n" << blackboard_json.dump(2) << std::endl;
+
 
   return 0;
 }
