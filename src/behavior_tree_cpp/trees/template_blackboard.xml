@@ -2,26 +2,29 @@
 <root BTCPP_format="4">
   <BehaviorTree ID="maintree">
     <Sequence>
-      <TemplateBlackboard point2f="{points}"
+      <SetTemplateBlackboard points="{points_}"
                           hp="{hp_}"/>
-      <ReadBlackboard target="{points}"/>
-      <ReadBlackboard target="{hp_}"/>
+      <ReadPoints points="{points_}"/>
+      <ReadHp hp="{hp_}"/>
     </Sequence>
   </BehaviorTree>
 
   <!-- Description of Node Models (used by Groot) -->
   <TreeNodesModel>
-    <Action ID="ReadBlackboard"
-            editable="false">
-      <input_port name="target"
-                  type="std::string"/>
+    <Action ID="ReadHp">
+      <input_port name="hp"
+                  type="int"/>
     </Action>
-    <Action ID="TemplateBlackboard"
+    <Action ID="ReadPoints">
+      <input_port name="points"
+                  type="Position2D"/>
+    </Action>
+    <Action ID="SetTemplateBlackboard"
             editable="true">
-      <output_port name="point2f"
-                   type="std::string"/>
+      <output_port name="points"
+                   type="Position2D"/>
       <output_port name="hp"
-                   type="std::string"/>
+                   type="int"/>
     </Action>
   </TreeNodesModel>
 
