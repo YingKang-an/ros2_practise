@@ -1,15 +1,34 @@
 cmake_minimum_required(VERSION 3.8)
-project(navigation)
+project(load_planner)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+# find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(rclcpp_action REQUIRED)
-find_package(nav2_msgs REQUIRED)
-find_package(behaviortree_cpp REQUIRED)
+find_package(pluginlib REQUIRED)
+find_package(navigation_planner REQUIRED)
+find_package(planner_sample_1 REQUIRED)
+find_package(planner_sample_2 REQUIRED)
+
+add_executable(load_planner src/load_planner.cpp)
+target_include_directories(load_planner PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
+target_compile_features(load_planner PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+ament_target_dependencies(
+  load_planner
+  "rclcpp"
+  "pluginlib"
+  "navigation_planner"
+  "planner_sample_1"
+  "planner_sample_2"
+)
+
+install(TARGETS load_planner
+  DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

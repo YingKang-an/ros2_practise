@@ -1,0 +1,6 @@
+<!-- 插件的描述文件 -->
+<library path="planner_sample_2">
+  <class type="planner_sample_2::Planner2" base_class_type="nav_planner::BasePlanner">
+    <description>简单的路径规划器2插件</description>
+  </class>
+</library>
